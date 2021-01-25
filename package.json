@@ -1,0 +1,18 @@
+{
+  "name": "connections-hiring",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:primer-io/connections-hiring.git",
+  "author": "Will Knowles <will@primerapi.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.14.1",
+    "@typescript-eslint/parser": "^4.14.1",
+    "eslint": "^7.18.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.3"
+  }
+}
