@@ -15,4 +15,4 @@ interface ProcessorConnection {
   cancel(rawCancelRequest: RawCancelRequest): ParsedCancelResponse;
 }
 
-export { ProcessorConnection };
+export default ProcessorConnection;
