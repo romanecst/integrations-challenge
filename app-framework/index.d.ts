@@ -8,11 +8,20 @@ export type TransactionStatus =
 
 export type DeclineReason = 'DO_NOT_HONOR' | 'INSUFFICIENT_FUNDS' | 'UNKNOWN';
 
+export interface CardDetails {
+  cardNumber: string;
+  cardholderName: string;
+  expiryMonth: number;
+  expiryYear: number;
+  cvv: string
+}
+
 export interface RawAuthorizationRequest {
-  amount: bigint;
+  amount: number;
   currencyCode: string;
   processorAccountId: string;
   processorApiKey: string;
+  cardDetails: CardDetails;
   merchantReference?: string;
 }
 
@@ -54,7 +63,7 @@ export interface ProcessorConnection {
   website: string;
   authorize(
     rawAuthRequest: RawAuthorizationRequest,
-  ): ParsedAuthorizationResponse;
-  capture(rawCaptureRequest: RawCaptureRequest): ParsedCaptureResponse;
-  cancel(rawCancelRequest: RawCancelRequest): ParsedCancelResponse;
+  ): Promise<ParsedAuthorizationResponse>;
+  capture(rawCaptureRequest: RawCaptureRequest): Promise<ParsedCaptureResponse>;
+  cancel(rawCancelRequest: RawCancelRequest): Promise<ParsedCancelResponse>;
 }
