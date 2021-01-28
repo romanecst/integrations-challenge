@@ -13,7 +13,7 @@ export interface CardDetails {
   cardholderName: string;
   expiryMonth: number;
   expiryYear: number;
-  cvv: string
+  cvv: string;
 }
 
 export interface RawAuthorizationRequest {
@@ -25,12 +25,17 @@ export interface RawAuthorizationRequest {
   merchantReference?: string;
 }
 
-export interface ParsedAuthorizationResponse {
-  transactionStatus: TransactionStatus;
-  declineReason?: DeclineReason;
-  errorMessage?: string;
-  processorTransactionId?: string;
-}
+type IAuthResponse<T, U extends TransactionStatus> = T & {
+  transactionStatus: U;
+};
+
+export type ParsedAuthorizationResponse =
+  | IAuthResponse<
+      { processorTransactionId: string },
+      'AUTHORIZED' | 'CANCELLED' | 'SETTLING' | 'SETTLED'
+    >
+  | IAuthResponse<{ declineReason: string }, 'DECLINED'>
+  | IAuthResponse<{ errorMessage: string }, 'FAILED'>;
 
 export interface RawCaptureRequest {
   processorTransactionId: string;
@@ -66,4 +71,17 @@ export interface ProcessorConnection {
   ): Promise<ParsedAuthorizationResponse>;
   capture(rawCaptureRequest: RawCaptureRequest): Promise<ParsedCaptureResponse>;
   cancel(rawCancelRequest: RawCancelRequest): Promise<ParsedCancelResponse>;
+}
+
+interface TransactionInfo {
+  processorTransactionId: string;
+}
+
+export interface ConnectionDescriptor {
+  connection: ProcessorConnection;
+  requestExamples: {
+    auth: () => RawAuthorizationRequest;
+    capture: (data: TransactionInfo) => RawCaptureRequest;
+    cancel: (data: TransactionInfo) => RawCancelRequest;
+  };
 }

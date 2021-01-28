@@ -14,5 +14,6 @@ module.exports = {
   rules: {
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
+    'no-console': 'off',
   },
 };
