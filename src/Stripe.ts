@@ -26,9 +26,22 @@ const StripeConnection: ConnectionDescriptor = {
         apiVersion: '2020-08-27',
       });
 
+      const token = await stripe.paymentMethods.create({
+        type: 'card',
+        card: {
+          number: request.cardDetails.cardNumber,
+          exp_month: request.cardDetails.expiryMonth,
+          exp_year: request.cardDetails.expiryYear,
+          cvc: request.cardDetails.cvv,
+        },
+      });
+
       const stripeResponse = await stripe.paymentIntents.create({
         amount: request.amount,
         currency: request.currencyCode,
+        payment_method: token.id,
+        capture_method: 'manual',
+        confirm: true,
       });
 
       return {
