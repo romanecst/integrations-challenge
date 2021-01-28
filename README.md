@@ -1,5 +1,4 @@
 # Primer Integrations Exercise
-
 ## Installation and running
 
 For this project you'll need to install:
@@ -12,5 +11,7 @@ For this project you'll need to install:
 
 # The entry point for the project is located in src/main.ts
 # You can run the example using the following
-> yarn start
+> yarn start-part-1
+# or
+> yarn start-part-2
 ```

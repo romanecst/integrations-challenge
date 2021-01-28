@@ -1,4 +1,6 @@
 import {
+  APIKeyCredentials,
+  CardDetails,
   ConnectionDescriptor,
   ParsedAuthorizationResponse,
   ParsedCancelResponse,
@@ -13,26 +15,26 @@ import Stripe from 'stripe';
 const STRIPE_API_KEY = 'sk_test_cFVHWj6yQNIOIqglbxBUoM9n00O3HP0G6J';
 const STRIPE_ACCOUNT_ID = 'my-account-id';
 
-const StripeConnection: ConnectionDescriptor = {
+const StripeConnection: ConnectionDescriptor<APIKeyCredentials, CardDetails> = {
   connection: {
     name: 'STRIPE',
 
     website: 'stripe.com',
 
     async authorize(
-      request: RawAuthorizationRequest,
+      request: RawAuthorizationRequest<APIKeyCredentials, CardDetails>,
     ): Promise<ParsedAuthorizationResponse> {
-      const stripe = new Stripe(request.processorApiKey, {
+      const stripe = new Stripe(request.processorCredentials.apiKey, {
         apiVersion: '2020-08-27',
       });
 
       const token = await stripe.paymentMethods.create({
         type: 'card',
         card: {
-          number: request.cardDetails.cardNumber,
-          exp_month: request.cardDetails.expiryMonth,
-          exp_year: request.cardDetails.expiryYear,
-          cvc: request.cardDetails.cvv,
+          number: request.paymentMethod.cardNumber,
+          exp_month: request.paymentMethod.expiryMonth,
+          exp_year: request.paymentMethod.expiryYear,
+          cvc: request.paymentMethod.cvv,
         },
       });
 
@@ -50,11 +52,15 @@ const StripeConnection: ConnectionDescriptor = {
       };
     },
 
-    capture(request: RawCaptureRequest): Promise<ParsedCaptureResponse> {
+    capture(
+      request: RawCaptureRequest<APIKeyCredentials>,
+    ): Promise<ParsedCaptureResponse> {
       throw new Error('Method Not Implemented');
     },
 
-    cancel(request: RawCancelRequest): Promise<ParsedCancelResponse> {
+    cancel(
+      request: RawCancelRequest<APIKeyCredentials>,
+    ): Promise<ParsedCancelResponse> {
       throw new Error('Method Not Implemented');
     },
   },
@@ -64,8 +70,10 @@ const StripeConnection: ConnectionDescriptor = {
       amount: 100,
       currencyCode: 'GBP',
       processorAccountId: STRIPE_ACCOUNT_ID,
-      processorApiKey: STRIPE_API_KEY,
-      cardDetails: {
+      processorCredentials: {
+        apiKey: STRIPE_API_KEY,
+      },
+      paymentMethod: {
         expiryMonth: 4,
         expiryYear: 2022,
         cardholderName: 'Mr Jamie MacLeod',
@@ -74,14 +82,18 @@ const StripeConnection: ConnectionDescriptor = {
       },
     }),
     capture: (data) => ({
-      processorAccountId: STRIPE_ACCOUNT_ID,
-      processorApiKey: STRIPE_API_KEY,
       processorTransactionId: data.processorTransactionId,
+      processorAccountId: STRIPE_ACCOUNT_ID,
+      processorCredentials: {
+        apiKey: STRIPE_API_KEY,
+      },
     }),
     cancel: (data) => ({
-      processorAccountId: STRIPE_ACCOUNT_ID,
-      processorApiKey: STRIPE_API_KEY,
       processorTransactionId: data.processorTransactionId,
+      processorAccountId: STRIPE_ACCOUNT_ID,
+      processorCredentials: {
+        apiKey: STRIPE_API_KEY,
+      },
     }),
   },
 };

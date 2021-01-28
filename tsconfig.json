@@ -11,10 +11,12 @@
     "target": "ES2020",
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
   },
   "typeAcquisition": {
     "enable": true,
-    "include": ["./typings.ts"]
-  },
+    "include": [
+      "typings/*"
+    ]
+  }
 }
