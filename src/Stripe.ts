@@ -1,4 +1,12 @@
-import { ConnectionDescriptor } from '@primer-io/app-framework';
+import {
+  ConnectionDescriptor,
+  ParsedAuthorizationResponse,
+  ParsedCancelResponse,
+  ParsedCaptureResponse,
+  RawAuthorizationRequest,
+  RawCancelRequest,
+  RawCaptureRequest,
+} from '@primer-io/app-framework';
 
 import Stripe from 'stripe';
 
@@ -11,7 +19,9 @@ const StripeConnection: ConnectionDescriptor = {
 
     website: 'stripe.com',
 
-    async authorize(request) {
+    async authorize(
+      request: RawAuthorizationRequest,
+    ): Promise<ParsedAuthorizationResponse> {
       const stripe = new Stripe(request.processorApiKey, {
         apiVersion: '2020-08-27',
       });
@@ -27,11 +37,11 @@ const StripeConnection: ConnectionDescriptor = {
       };
     },
 
-    capture(request) {
+    capture(request: RawCaptureRequest): Promise<ParsedCaptureResponse> {
       throw new Error('Method Not Implemented');
     },
 
-    cancel(request) {
+    cancel(request: RawCancelRequest): Promise<ParsedCancelResponse> {
       throw new Error('Method Not Implemented');
     },
   },
