@@ -11,7 +11,7 @@ For this project you'll need to install:
 
 # The entry point for the project is located in src/main.ts
 # You can run the example using the following
-> yarn start-part-1
+> yarn start:processors
 # or
-> yarn start-part-2
+> yarn start:payment-methods
 ```

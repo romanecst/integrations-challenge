@@ -26,7 +26,7 @@
     "stripe": "^8.132.0"
   },
   "scripts": {
-    "start-part-1": "ts-node part-1/main.ts",
-    "start-part-2": "ts-node part-2/server.ts"
+    "start:processors": "ts-node processors/main.ts",
+    "start:payment-methods": "ts-node payment-methods/server.ts"
   }
 }
