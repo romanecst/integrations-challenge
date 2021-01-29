@@ -23,14 +23,13 @@ Client Side:
 
 Feel free to tackle these in the order that makes most sense to you.
 
-In the backend we've provided a `HTTPClient` implementation which you can use to make API calls to PayPal's orders API
+### Tips
 
-The backend is hooked up to a <strike>beautiful</strike> UI which you can use to test your implementation, this can be found in `client.js`. There's a function called `renderPayPalButton`, you should check out PayPal's documentation and find out how to create a paypal order here. Once you've created the order: pass the `orderID` to `onAuthorizeTransaction(...)`
-
-Once a transaction has been authorized, you should be able to click the 'Cancel Transaction' button to test your implementation
-
-(Don't forget to log in to PayPal using the test account which you created!)
-
+- In the backend we've provided a `HTTPClient` implementation which you can use to make API calls to PayPal's orders API
+- Check out PayPal's orders API and client SDK documentation
+- Once a transaction has been authorized, you should be able to cancel it using the 'Cancel Transaction' button.
+- Don't forget to log in to PayPal using the test account which you created!
+- If anything is unclear, Don't hesitate to reach out
 
 ## Run the example
 To run the program use the following command:
