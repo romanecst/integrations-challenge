@@ -1,3 +1,4 @@
+[![Social banner for Primer](https://raw.githubusercontent.com/primer-api/primer-api/main/header.png)](https://primer.io)
 # Primer Integrations Challenge
 
 ## Installation
@@ -15,4 +16,10 @@ yarn install
 
 You should be all set :fire:
 
-You'll find instructions for the challenges in [processors](processors/) and [payment-methods](payment-methods/)
+## Checkout Challenge
+
+If you've been asked to complete the checkout challenge, follow the instructions in the [checkout](checkout/) folder :tada:
+
+## Connections Challenge
+
+If you've been asked to complete the connections challenge, follow the instructions in the [connections](connections/) folder :tada:

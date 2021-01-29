@@ -1,4 +1,4 @@
-# Payment Methods
+# Connections - Processors
 
 For this exercise you'll be implementing a Processor connection using Stripe's API
 
