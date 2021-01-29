@@ -16,12 +16,31 @@ export interface CardDetails {
   cvv: string;
 }
 
-export interface RawAuthorizationRequest {
+interface PayPalOrder {
+  orderId: string;
+}
+
+interface APIKeyCredentials {
+  apiKey: string;
+}
+
+interface ClientIDSecretCredentials {
+  clientId: string;
+  clientSecret: string;
+}
+
+type ProcessorConfig<T> = T & {
+  accountId: string;
+};
+
+interface IProcessorRequest<T> {
+  processorConfig: ProcessorConfig<T>;
+}
+
+export interface RawAuthorizationRequest<T, U> extends IProcessorRequest<T> {
   amount: number;
   currencyCode: string;
-  processorAccountId: string;
-  processorApiKey: string;
-  cardDetails: CardDetails;
+  paymentMethod: U;
   merchantReference?: string;
 }
 
@@ -37,10 +56,8 @@ export type ParsedAuthorizationResponse =
   | IAuthResponse<{ declineReason: string }, 'DECLINED'>
   | IAuthResponse<{ errorMessage: string }, 'FAILED'>;
 
-export interface RawCaptureRequest {
+export interface RawCaptureRequest<T> extends IProcessorRequest<T> {
   processorTransactionId: string;
-  processorAccountId: string;
-  processorApiKey: string;
   merchantReference?: string;
 }
 
@@ -50,10 +67,8 @@ export interface ParsedCaptureResponse {
   errorMessage?: string;
 }
 
-export interface RawCancelRequest {
+export interface RawCancelRequest<T> extends IProcessorRequest<T> {
   processorTransactionId: string;
-  processorAccountId: string;
-  processorApiKey: string;
   merchantReference?: string;
 }
 
@@ -63,25 +78,19 @@ export interface ParsedCancelResponse {
   errorMessage?: string;
 }
 
-export interface ProcessorConnection {
+export interface ProcessorConnection<T, U> {
   name: string;
   website: string;
+  configuration: ProcessorConfig<T>;
   authorize(
-    rawAuthRequest: RawAuthorizationRequest,
+    rawAuthRequest: RawAuthorizationRequest<T, U>,
   ): Promise<ParsedAuthorizationResponse>;
-  capture(rawCaptureRequest: RawCaptureRequest): Promise<ParsedCaptureResponse>;
-  cancel(rawCancelRequest: RawCancelRequest): Promise<ParsedCancelResponse>;
+  capture(
+    rawCaptureRequest: RawCaptureRequest<T>,
+  ): Promise<ParsedCaptureResponse>;
+  cancel(rawCancelRequest: RawCancelRequest<T>): Promise<ParsedCancelResponse>;
 }
 
 interface TransactionInfo {
   processorTransactionId: string;
-}
-
-export interface ConnectionDescriptor {
-  connection: ProcessorConnection;
-  requestExamples: {
-    auth: () => RawAuthorizationRequest;
-    capture: (data: TransactionInfo) => RawCaptureRequest;
-    cancel: (data: TransactionInfo) => RawCancelRequest;
-  };
 }

@@ -1,16 +1,18 @@
-# Primer Integrations Exercise
+# Primer Integrations Challenge
 
-## Installation and running
+## Installation
 
 For this project you'll need to install:
+
 - [Node.js > 12.x](https://nodejs.org/en/)
 - [Yarn package manager](https://classic.yarnpkg.com/en/docs/install#debian-stable)
 
-```bash
-# Navigate to the cloned repository and install the dependencies
-> yarn install
+To install the dependencies simply run
 
-# The entry point for the project is located in src/main.ts
-# You can run the example using the following
-> yarn start
+```bash
+yarn install
 ```
+
+You should be all set :fire:
+
+You'll find instructions for the challenges in [processors](processors/) and [payment-methods](payment-methods/)
