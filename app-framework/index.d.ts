@@ -90,12 +90,3 @@ export interface ProcessorConnection<T, U> {
 interface TransactionInfo {
   processorTransactionId: string;
 }
-
-export interface ConnectionDescriptor<T, U> {
-  connection: ProcessorConnection<T, U>;
-  requestExamples: {
-    auth: () => RawAuthorizationRequest<T, U>;
-    capture: (data: TransactionInfo) => RawCaptureRequest<T>;
-    cancel: (data: TransactionInfo) => RawCancelRequest<T>;
-  };
-}

@@ -1,57 +1,128 @@
-import { TransactionInfo } from '@primer-io/app-framework';
+import {
+  ParsedAuthorizationResponse,
+  ParsedCancelResponse,
+  ParsedCaptureResponse,
+} from '@primer-io/app-framework';
 import StripeConnection from './Stripe';
 
+const STRIPE_API_KEY = 'sk_test_cFVHWj6yQNIOIqglbxBUoM9n00O3HP0G6J';
+const STRIPE_ACCOUNT_ID = 'my-account-id';
+
 (async () => {
-  /**
-   * Create anm auth request and perform an authorization
-   */
-  const { requestExamples, connection } = StripeConnection;
-
-  console.log(`Authorizing payment using "${connection.name}"`);
-
-  const authRequest = requestExamples.auth();
-  const authResponse = await connection.authorize(authRequest);
-
-  console.log(
-    `Authorization request complete: "${authResponse.transactionStatus}"`,
-  );
-
-  if (authResponse.transactionStatus === 'FAILED') {
-    console.log(`Authorization Request failed: ${authResponse.errorMessage}`);
-    process.exit();
-  }
-
-  if (authResponse.transactionStatus === 'DECLINED') {
-    console.log(`Authorization was declined: ${authResponse.declineReason}`);
-    process.exit();
-  }
-
-  /**
-   * Now we can either cancel or capture the authorization
-   */
-  const transactionInfo: TransactionInfo = {
-    processorTransactionId: authResponse.processorTransactionId,
-  };
-
-  console.log(
-    `Processor transaction ID: ${transactionInfo.processorTransactionId}`,
-  );
-
-  /**
-   * Uncomment the following lines to capture
-   */
-  // console.log(`Capturing payment using "${connection.name}"`);
-  // const captureRequest = requestExamples.capture(transactionInfo);
-  // const captureResponse = await connection.capture(captureRequest);
-  // console.log(
-  //   `Capture request complete "${captureResponse.transactionStatus}"`,
-  // );
-
-  /**
-   * Uncomment the following lines to cancel
-   */
-  // console.log(`Cancelling payment using "${connection.name}"`);
-  // const cancelRequest = requestExamples.cancel(transactionInfo);
-  // const cancelResponse = await connection.cancel(cancelRequest);
-  // console.log(`Cancel request complete "${cancelResponse.transactionStatus}"`);
+  console.log('\n=== TEST: authorization ===');
+  await testAuthTransaction();
+  console.log('\n=== TEST: capture ===');
+  await testCaptureTransaction();
+  console.log('\n=== TEST: cancel ===');
+  await testCancelTransaction();
 })();
+
+async function testAuthTransaction(): Promise<ParsedAuthorizationResponse> {
+  console.log(`Authorizing payment using "${StripeConnection.name}"`);
+
+  let response: ParsedAuthorizationResponse | null = null;
+
+  try {
+    response = await StripeConnection.authorize({
+      amount: 100,
+      currencyCode: 'GBP',
+      processorAccountId: STRIPE_ACCOUNT_ID,
+      processorCredentials: {
+        apiKey: STRIPE_API_KEY,
+      },
+      paymentMethod: {
+        expiryMonth: 4,
+        expiryYear: 2022,
+        cardholderName: 'Mr Jamie MacLeod',
+        cvv: '020',
+        cardNumber: '4111111111111111',
+      },
+    });
+  } catch (e) {
+    console.error('Error while authorizing transaction:');
+    console.error(e);
+    process.exit(1);
+  }
+
+  console.log(
+    `Authorization request complete: "${response.transactionStatus}"`,
+  );
+
+  if (response.transactionStatus === 'FAILED') {
+    console.log(`Authorization Request failed: ${response.errorMessage}`);
+    process.exit(1);
+  }
+
+  if (response.transactionStatus === 'DECLINED') {
+    console.log(`Authorization was declined: ${response.declineReason}`);
+    process.exit(1);
+  }
+
+  return response;
+}
+
+async function testCancelTransaction(): Promise<void> {
+  const authResponse = await testAuthTransaction();
+
+  console.log('Cancelling authorized payment...');
+
+  if (authResponse.transactionStatus !== 'AUTHORIZED') {
+    console.error('Transaction must be AUTHORIZED inn order to cancel it');
+    process.exit(1);
+  }
+
+  let response: ParsedCancelResponse | null = null;
+
+  try {
+    response = await StripeConnection.cancel({
+      processorAccountId: STRIPE_ACCOUNT_ID,
+      processorTransactionId: authResponse.processorTransactionId,
+      processorCredentials: {
+        apiKey: STRIPE_API_KEY,
+      },
+    });
+  } catch (e) {
+    console.error('Error while cancelling transaction:');
+    console.error(e);
+    process.exit(1);
+  }
+
+  if (response.transactionStatus !== 'CANCELLED') {
+    console.error(
+      `Expected transaction status to be "CANCELLED" but received "${response.transactionStatus}"`,
+    );
+  }
+}
+
+async function testCaptureTransaction(): Promise<void> {
+  const authResponse = await testAuthTransaction();
+
+  console.log('Capturing authorized payment...');
+
+  if (authResponse.transactionStatus !== 'AUTHORIZED') {
+    console.error('Transaction must be AUTHORIZED inn order to capture it');
+    process.exit(1);
+  }
+
+  let response: ParsedCaptureResponse | null = null;
+
+  try {
+    response = await StripeConnection.capture({
+      processorAccountId: STRIPE_ACCOUNT_ID,
+      processorTransactionId: authResponse.processorTransactionId,
+      processorCredentials: {
+        apiKey: STRIPE_API_KEY,
+      },
+    });
+  } catch (e) {
+    console.error('Error while capturing transaction:');
+    console.error(e);
+    process.exit(1);
+  }
+
+  if (response.transactionStatus !== 'SETTLED') {
+    console.error(
+      `Expected transaction status to be "SETTLED" but received "${response.transactionStatus}"`,
+    );
+  }
+}
