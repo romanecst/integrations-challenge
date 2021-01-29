@@ -29,9 +29,12 @@ interface ClientIDSecretCredentials {
   clientSecret: string;
 }
 
+type ProcessorConfig<T> = T & {
+  accountId: string;
+};
+
 interface IProcessorRequest<T> {
-  processorAccountId: string;
-  processorCredentials: T;
+  processorConfig: ProcessorConfig<T>;
 }
 
 export interface RawAuthorizationRequest<T, U> extends IProcessorRequest<T> {
@@ -78,6 +81,7 @@ export interface ParsedCancelResponse {
 export interface ProcessorConnection<T, U> {
   name: string;
   website: string;
+  configuration: ProcessorConfig<T>;
   authorize(
     rawAuthRequest: RawAuthorizationRequest<T, U>,
   ): Promise<ParsedAuthorizationResponse>;

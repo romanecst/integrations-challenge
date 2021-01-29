@@ -12,17 +12,13 @@ server.use(bodyParser.json());
 
 const router = express.Router();
 
-router.post('/authorize', async (req, res, next) => {
+router.get('/config', (req, res) => res.send(PayPal.configuration));
+
+router.post('/authorize', async (req, res) => {
   const response = await PayPal.authorize({
     amount: 1299,
     currencyCode: 'EUR',
-    processorAccountId: 'my-paypal-account',
-    processorCredentials: {
-      clientId:
-        'Abp8AFfM7k8Lt4A1y0_jBKNPznKe99TOHZ9CzJHhlMyJdb4iih1Tuf4srHkuqmA-V5DisAp0d_JyTgAS',
-      clientSecret:
-        'EB429LvO7xYnShqPtloyBouCIFg5msNeRuDjDs7NShJPVwvZBOxH9HJ8SekXxwfg9s8AwVTuyO9pkFyU',
-    },
+    processorConfig: PayPal.configuration,
     paymentMethod: {
       orderId: req.body.orderId,
     },
@@ -31,31 +27,19 @@ router.post('/authorize', async (req, res, next) => {
   return res.send(response);
 });
 
-router.post('/capture', async (req, res, next) => {
+router.post('/capture', async (req, res) => {
   const response = await PayPal.capture({
     processorTransactionId: req.body.orderId,
-    processorAccountId: 'my-paypal-account',
-    processorCredentials: {
-      clientId:
-        'Abp8AFfM7k8Lt4A1y0_jBKNPznKe99TOHZ9CzJHhlMyJdb4iih1Tuf4srHkuqmA-V5DisAp0d_JyTgAS',
-      clientSecret:
-        'EB429LvO7xYnShqPtloyBouCIFg5msNeRuDjDs7NShJPVwvZBOxH9HJ8SekXxwfg9s8AwVTuyO9pkFyU',
-    },
+    processorConfig: PayPal.configuration,
   });
 
   return res.send(response);
 });
 
-router.post('/cancel', async (req, res, next) => {
+router.post('/cancel', async (req, res) => {
   const response = await PayPal.cancel({
     processorTransactionId: req.body.orderId,
-    processorAccountId: 'my-paypal-account',
-    processorCredentials: {
-      clientId:
-        'Abp8AFfM7k8Lt4A1y0_jBKNPznKe99TOHZ9CzJHhlMyJdb4iih1Tuf4srHkuqmA-V5DisAp0d_JyTgAS',
-      clientSecret:
-        'EB429LvO7xYnShqPtloyBouCIFg5msNeRuDjDs7NShJPVwvZBOxH9HJ8SekXxwfg9s8AwVTuyO9pkFyU',
-    },
+    processorConfig: PayPal.configuration,
   });
 
   return res.send(response);

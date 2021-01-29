@@ -4,14 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <style>
+    #root {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 500px;
+    }
+    
+    #paypal-button {
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
   <div id="root">
     <div id="paypal-button" ></div>
-    <button id="capture-button">Capture</button>
-    <button id="cancel-button">Cancel</button>
+    <button disabled='true' id="cancel-button">Cancel Transaction</button>
   </div>
-  <script src="https://www.paypal.com/sdk/js?currency=EUR&client-id=Abp8AFfM7k8Lt4A1y0_jBKNPznKe99TOHZ9CzJHhlMyJdb4iih1Tuf4srHkuqmA-V5DisAp0d_JyTgAS"></script>
+  <script src="setup.js" ></script>
   <script src="client.js" ></script>
 </body>
 </html>

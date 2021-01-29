@@ -5,9 +5,6 @@ import {
 } from '@primer-io/app-framework';
 import StripeConnection from './Stripe';
 
-const STRIPE_API_KEY = 'sk_test_cFVHWj6yQNIOIqglbxBUoM9n00O3HP0G6J';
-const STRIPE_ACCOUNT_ID = 'my-account-id';
-
 (async () => {
   console.log('\n=== TEST: authorization ===');
   await testAuthTransaction();
@@ -24,12 +21,9 @@ async function testAuthTransaction(): Promise<ParsedAuthorizationResponse> {
 
   try {
     response = await StripeConnection.authorize({
+      processorConfig: StripeConnection.configuration,
       amount: 100,
       currencyCode: 'GBP',
-      processorAccountId: STRIPE_ACCOUNT_ID,
-      processorCredentials: {
-        apiKey: STRIPE_API_KEY,
-      },
       paymentMethod: {
         expiryMonth: 4,
         expiryYear: 2022,
@@ -75,11 +69,8 @@ async function testCancelTransaction(): Promise<void> {
 
   try {
     response = await StripeConnection.cancel({
-      processorAccountId: STRIPE_ACCOUNT_ID,
       processorTransactionId: authResponse.processorTransactionId,
-      processorCredentials: {
-        apiKey: STRIPE_API_KEY,
-      },
+      processorConfig: StripeConnection.configuration,
     });
   } catch (e) {
     console.error('Error while cancelling transaction:');
@@ -108,11 +99,8 @@ async function testCaptureTransaction(): Promise<void> {
 
   try {
     response = await StripeConnection.capture({
-      processorAccountId: STRIPE_ACCOUNT_ID,
       processorTransactionId: authResponse.processorTransactionId,
-      processorCredentials: {
-        apiKey: STRIPE_API_KEY,
-      },
+      processorConfig: StripeConnection.configuration,
     });
   } catch (e) {
     console.error('Error while capturing transaction:');
