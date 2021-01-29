@@ -1,6 +1,8 @@
 # Payment Methods
 
-For this exercise you'll be implementing a Processor connection using Stripe's Node.js SDK.
+For this exercise you'll be implementing a Processor connection using Stripe's API
+
+**Note:** you are required to **not** use Stripe's node SDK.
 
 ## Set up
 
@@ -19,10 +21,13 @@ There are 4 parts to the exercise:
 Feel free to tackle these in the order that makes most sense to you.
 
 ### Tips
-- Check out Stripe's PaymentIntents API and nodejs SDK documentation
+
+- Check out Stripe's PaymentIntents API
+- There is an `HTTPClient` implementation in `./common` that you may use, we've already imported it into `Stripe.ts` for you. Remember though, you can't use Stripe's SDK.
 - If anything is unclear, Don't hesitate to reach out
 
 ## Run the example
+
 To run the program use the following command:
 
 ```bash

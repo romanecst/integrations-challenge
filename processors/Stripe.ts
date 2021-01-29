@@ -10,11 +10,7 @@ import {
   RawCaptureRequest,
 } from '@primer-io/app-framework';
 
-/**
- * Use the Stripe library to interact with their API.
- * (There's an HTTP client implementation in ../commons/HTTPClient.ts if you prefer to use the REST API ;))
- */
-import Stripe from 'stripe';
+import HttpClient from '../common/HTTPClient';
 
 const StripeConnection: ProcessorConnection<APIKeyCredentials, CardDetails> = {
   name: 'STRIPE',
@@ -30,7 +26,7 @@ const StripeConnection: ProcessorConnection<APIKeyCredentials, CardDetails> = {
    *
    * You should authorize a transaction and return an appropriate response
    */
-  async authorize(
+  authorize(
     request: RawAuthorizationRequest<APIKeyCredentials, CardDetails>,
   ): Promise<ParsedAuthorizationResponse> {
     throw new Error('Method Not Implemented');

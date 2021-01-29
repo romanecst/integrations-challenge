@@ -4,19 +4,15 @@
     "paths": {
       "@primer-io/app-framework": ["app-framework"]
     },
-    "lib": [
-      "ES2020"
-    ],
+    "lib": ["ES2020"],
     "module": "commonjs",
     "target": "ES2020",
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "Node"
   },
   "typeAcquisition": {
     "enable": true,
-    "include": [
-      "typings/*"
-    ]
+    "include": ["typings/*"]
   }
 }

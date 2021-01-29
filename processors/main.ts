@@ -27,7 +27,7 @@ async function testAuthTransaction(): Promise<ParsedAuthorizationResponse> {
       paymentMethod: {
         expiryMonth: 4,
         expiryYear: 2022,
-        cardholderName: 'Mr Jamie MacLeod',
+        cardholderName: 'Mr Foo Bar',
         cvv: '020',
         cardNumber: '4111111111111111',
       },
@@ -61,7 +61,7 @@ async function testCancelTransaction(): Promise<void> {
   console.log('Cancelling authorized payment...');
 
   if (authResponse.transactionStatus !== 'AUTHORIZED') {
-    console.error('Transaction must be AUTHORIZED inn order to cancel it');
+    console.error('Transaction must be AUTHORIZED in order to cancel it');
     process.exit(1);
   }
 
@@ -91,7 +91,7 @@ async function testCaptureTransaction(): Promise<void> {
   console.log('Capturing authorized payment...');
 
   if (authResponse.transactionStatus !== 'AUTHORIZED') {
-    console.error('Transaction must be AUTHORIZED inn order to capture it');
+    console.error('Transaction must be AUTHORIZED in order to capture it');
     process.exit(1);
   }
 

@@ -5,7 +5,7 @@ For this exercise you'll be implementing a Processor connection using PayPal's R
 ## Set up
 
 You'll need to log in to [PayPal's developer site](https://developer.paypal.com/home/) and create a sandbox account.
-Once you've done that, you should be able to find an *Application* with a client ID and client Secret.
+Once you've done that, you should be able to find an _Application_ with a client ID and client Secret.
 
 For the client side log in, you'll need to create a sandbox test user as well. You can find them in the Sandbox > [Accounts](https://developer.paypal.com/developer/accounts/) section of the dashboard.
 
@@ -14,12 +14,14 @@ For the client side log in, you'll need to create a sandbox test user as well. Y
 There are 4 parts to the exercise:
 
 Backend:
-  - Add your sandbox credentials to `PayPal.ts`
-  - Implement the `authorize()` method in `PayPal.ts`
-  - Implement the `cancel()` method in `PayPal.ts`
+
+- Add your sandbox credentials to `PayPal.ts`
+- Implement the `authorize()` method in `PayPal.ts`
+- Implement the `cancel()` method in `PayPal.ts`
 
 Client Side:
-  - Complete the implementation of `renderPayPalButton()` in `client.js`
+
+- Complete the implementation of `renderPayPalButton()` in `client.js`
 
 Feel free to tackle these in the order that makes most sense to you.
 
@@ -32,6 +34,7 @@ Feel free to tackle these in the order that makes most sense to you.
 - If anything is unclear, Don't hesitate to reach out
 
 ## Run the example
+
 To run the program use the following command:
 
 ```bash
