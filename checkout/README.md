@@ -1,4 +1,4 @@
-# Payment Methods
+# Checkout - Payment Methods
 
 For this exercise you'll be implementing a Processor connection using PayPal's REST API and also tackling some of the client side implementation on the web.
 
