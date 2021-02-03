@@ -13,7 +13,20 @@ function renderPayPalButton() {
    * that you receive from PayPal
    */
   const options = {
-    /** */
+    //create an order on click on the paypal button for an amount of 12.99€
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: '12.99'
+          }
+        }]
+      })
+    },
+    //call onAuthoriseTransaction function with the orderID of the created order
+    onApprove: function(data, actions) {
+      return onAuthorizeTransaction(data.orderID)
+    },
   };
 
   window.paypal.Buttons(options).render(button);
@@ -45,5 +58,13 @@ function onCancelTransaction() {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ orderId: authResponse.processorTransactionId }),
-  });
+  })
+  .then((r) => r.json())
+  .then((response) => {
+      authResponse = response;
+      //disables the cancel button once authorisation is voided and displays 'Payment authorisation has been cancelled.'
+      document.getElementById('cancel-button').setAttribute('disabled', 'true');
+      let text = document.createTextNode('Payment authorisation has been cancelled.');
+      document.getElementById('root').appendChild(text);
+  });;
 }
